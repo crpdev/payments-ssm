@@ -1,5 +1,5 @@
 package com.crpdev.io.paymentsssm.domain;
 
 public enum PaymentEvent {
-    PRE_AUTH, PRE_AUTH_OK, PRE_AUTH_KO, AUTH, AUTH_OK, AUTH_KO
+    INIT_PAYMENT, BAL_OK, BAL_KO, GET_OVERDRAFT_CD, OVERDRAFT_OK, OVERDRAFT_KO
 }

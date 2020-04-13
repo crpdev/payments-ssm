@@ -9,10 +9,8 @@ public interface PaymentService {
 
     Payment newPayment(Payment payment);
 
-    StateMachine<PaymentState, PaymentEvent> preAuth(Long paymentId);
+    StateMachine<PaymentState, PaymentEvent> checkBalance(Long paymentId);
 
-    StateMachine<PaymentState, PaymentEvent> authorizePayment(Long paymentId);
-
-    StateMachine<PaymentState, PaymentEvent> declinePayment(Long paymentId);
+    StateMachine<PaymentState, PaymentEvent> getOverDraftCode(Long paymentId);
 
 }

@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
-    static final String PAYMENT_ID_HEADER = "PAYMENT_ID";
+    public static final String PAYMENT_ID_HEADER = "PAYMENT_ID";
 
     private final PaymentRepository paymentRepository;
 
@@ -29,31 +29,23 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public Payment newPayment(Payment payment) {
-        payment.setState(PaymentState.NEW);
+        payment.setState(PaymentState.NEW_PAYMENT);
         return paymentRepository.save(payment);
     }
 
     @Override
     @Transactional
-    public StateMachine<PaymentState, PaymentEvent> preAuth(Long paymentId) {
+    public StateMachine<PaymentState, PaymentEvent> checkBalance(Long paymentId) {
         StateMachine<PaymentState, PaymentEvent> sm = build(paymentId);
-        sendEvent(paymentId, sm, PaymentEvent.PRE_AUTH_OK);
+        sendEvent(paymentId, sm, PaymentEvent.INIT_PAYMENT);
         return sm;
     }
 
     @Override
     @Transactional
-    public StateMachine<PaymentState, PaymentEvent> authorizePayment(Long paymentId) {
+    public StateMachine<PaymentState, PaymentEvent> getOverDraftCode(Long paymentId) {
         StateMachine<PaymentState, PaymentEvent> sm = build(paymentId);
-        sendEvent(paymentId, sm, PaymentEvent.AUTH_OK);
-        return sm;
-    }
-
-    @Transactional
-    @Override
-    public StateMachine<PaymentState, PaymentEvent> declinePayment(Long paymentId) {
-        StateMachine<PaymentState, PaymentEvent> sm = build(paymentId);
-        sendEvent(paymentId, sm, PaymentEvent.AUTH_KO);
+        sendEvent(paymentId, sm, PaymentEvent.GET_OVERDRAFT_CD);
         return sm;
     }
 
@@ -65,8 +57,8 @@ public class PaymentServiceImpl implements PaymentService {
         sm.sendEvent(msg);
     }
 
-    private StateMachine<PaymentState, PaymentEvent> build(Long paymentid) {
-        Payment payment = paymentRepository.getOne(paymentid);
+    private StateMachine<PaymentState, PaymentEvent> build(Long paymentId) {
+        Payment payment = paymentRepository.getOne(paymentId);
         StateMachine<PaymentState, PaymentEvent> sm = stateMachineFactory.getStateMachine(Long.toString(payment.getId()));
         sm.stop();
         sm.getStateMachineAccessor()
@@ -77,4 +69,6 @@ public class PaymentServiceImpl implements PaymentService {
         sm.start();
         return sm;
     }
+
+
 }

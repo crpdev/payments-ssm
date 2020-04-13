@@ -20,6 +20,14 @@ public class PaymentStateChangeInterceptor extends StateMachineInterceptorAdapte
 
     private final PaymentRepository paymentRepository;
 
+    /**
+     * Interceptor to persist the state to the object
+     * Could be enhanced with a cache mechanism
+     * @param state
+     * @param message
+     * @param transition
+     * @param stateMachine
+     */
     @Override
     public void preStateChange(State<PaymentState, PaymentEvent> state, Message<PaymentEvent> message, Transition<PaymentState, PaymentEvent> transition, StateMachine<PaymentState, PaymentEvent> stateMachine) {
         Optional.ofNullable(message).ifPresent(msg -> {

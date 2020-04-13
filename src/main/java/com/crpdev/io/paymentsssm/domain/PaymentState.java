@@ -1,5 +1,5 @@
 package com.crpdev.io.paymentsssm.domain;
 
 public enum PaymentState {
-    NEW, PRE_AUTH, PRE_AUTH_ERR, AUTH, AUTH_ERR
+    NEW_PAYMENT, OVERDRAFT, MAKE_PAYMENT, DENY_PAYMENT
 }

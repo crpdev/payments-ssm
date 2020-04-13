@@ -24,9 +24,7 @@ class StateMachineConfigTest {
         sm.start();
         System.out.println(sm.getState().toString());
 
-        sm.sendEvent(PaymentEvent.PRE_AUTH);
-        System.out.println(sm.getState().toString());
-        sm.sendEvent(PaymentEvent.PRE_AUTH_OK);
+        sm.sendEvent(PaymentEvent.INIT_PAYMENT);
         System.out.println(sm.getState().toString());
 
     }
